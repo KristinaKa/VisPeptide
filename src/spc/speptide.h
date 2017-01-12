@@ -15,12 +15,13 @@
 #include "result.h"
 #include "scoring.h"
 
+using namespace std;
+
 #ifndef SPEPTIDE_H
 #define SPEPTIDE_H
 
 
-int launch_speptide (int argc, char *argv[]);
-
+ResultSap launch_speptide (string mgf1F, string mgf2F, dictionary* ini);
 
 
 #endif

@@ -21,7 +21,7 @@ using namespace std;
 #define SPEPTIDE_H
 
 
-ResultSap launch_speptide (string mgf1F, string mgf2F);
+ResultSap launch_speptide (string mgf1F, string mgf2F, dictionary* ini);
 
 
 #endif

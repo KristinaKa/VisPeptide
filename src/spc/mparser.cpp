@@ -46,6 +46,7 @@ std::vector<Spectrum> MParser::loadMGF(std::string filename,
   bool isNoCharge = true;
   // read mgf
   std::ifstream infile(filename.c_str());
+  cout<<ifsream<<"\n";
   if (!infile) throw std::invalid_argument("There is no such file with mgf.");
   // go through each line
   while(getline(infile, line)) {

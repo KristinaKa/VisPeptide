@@ -23,9 +23,7 @@ current version date: 24.03.2016
 #include <stdexcept>
 #include "time.h"
 
-extern "C" {
 #include "../ini/iniparser.h"
-}
 #include "spectra.h"
 #include "mparser.h"
 #include "result.h"
@@ -33,12 +31,8 @@ extern "C" {
 
 using namespace std;
 
-ResultSap launch_speptide (string mgf1F, string mgf2F)
+ResultSap launch_speptide (string mgf1F, string mgf2F, dictionary* ini)
 {
-   dictionary* ini;
-   const char* ini_file = "../params/default.ini";
-   ini = iniparser_load(ini_file);
-
  
   // annot params
   double byDelta = iniparser_getdouble(ini, "anot:da", 0.5);
@@ -81,7 +75,6 @@ ResultSap launch_speptide (string mgf1F, string mgf2F)
   vector<ADelta> ms1deltas = msp.defaultDeltas();
   sort(ms1deltas.begin(), ms1deltas.end());
 
-  cout<<mgf1F<<"\n";
   // load and parse mgf data. one set is query(annotation - false)
   // another (second) database with seq tab(annotation - true)
   vector<Spectrum> spv1 = msp.loadMGF(mgf1F, masses, byDelta, false, false);

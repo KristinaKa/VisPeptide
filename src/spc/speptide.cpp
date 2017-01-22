@@ -36,7 +36,8 @@ using namespace std;
 ResultSap launch_speptide (string mgf1F, string mgf2F)
 {
    dictionary* ini;
-   const char* ini_file = "../params/default.ini";
+//Path à changer!!!
+   const char* ini_file = "/home/kristina/Travail/projet_genie_logiciel/VisPeptide/params/default.ini";
    ini = iniparser_load(ini_file);
 
  

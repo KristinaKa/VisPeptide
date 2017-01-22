@@ -21,7 +21,6 @@ SOURCES += qt/main.cpp \
            qt/mainwindow.cpp \
            src/ini/dictionary.c \
            src/ini/iniparser.c \
-           src/spc/main.cpp \
            src/spc/mparser.cpp \
            src/spc/ms1ms2.cpp \
            src/spc/result.cpp \

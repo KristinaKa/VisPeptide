@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "QFileDialog"
 
 MainWindow::MainWindow()
 {
@@ -27,6 +28,8 @@ MainWindow::MainWindow()
 	//QPushButton run = new QPushButton("run");
 }
 
+
+
 void MainWindow::createImportBox()
 {
     //La boîte
@@ -34,15 +37,50 @@ void MainWindow::createImportBox()
     //Le layout qui ira dans la boîte
     QHBoxLayout *layout = new QHBoxLayout;
 
-    for (int i = 0; i < NumButtons; ++i) {
-        buttons[i] = new QPushButton(tr("Button %1").arg(i + 1));
-        layout->addWidget(buttons[i]);
-    }
+    //Browse button
+    QPushButton* browseButton = new QPushButton("Browse");
+    layout->addWidget(browseButton);
+    openFileNameLabel = new QLabel("");
+    layout->addWidget(openFileNameLabel);
+    QObject::connect(browseButton, SIGNAL(clicked()), this, SLOT(browse()));
+
+    //Run button
+    QPushButton* runButton = new QPushButton("Run");
+    layout->addWidget(runButton);
+    QObject::connect(runButton, SIGNAL(clicked()), this, SLOT(run()));
+
 
     //On installe le layout dans la boite
     importBox->setLayout(layout);
 }
 
+
+void MainWindow::browse(){
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select a file to open...", QDir::homePath());
+
+    for (int i=0; i<fileNames.size(); i++){
+        QString fileName = fileNames[i];
+        std::string name = fileName.toUtf8().constData();
+        mgfFileNames.push_back(name);
+        openFileNameLabel->setText(openFileNameLabel->text()+"\n"+fileName);
+   }
+}
+
+void MainWindow::run(){
+    if (mgfFileNames.size() >= 2){
+        string mgf1F = mgfFileNames[0];
+        string mgf2F = mgfFileNames[1];
+
+        ResultSap res = launch_speptide(mgf1F, mgf2F);
+        std::cout<<"fini !!!"<<endl;
+     }
+}
+
+int MainWindow::verifyImports(){
+    if (mgfFileNames.size() == 2)
+        return 1;
+    return 0;
+}
 
 void MainWindow::createParameterBox()
 {
@@ -67,5 +105,6 @@ void MainWindow::createVisuBox()
         buttons[i] = new QPushButton(tr("Button %1").arg(i + 1));
         layout->addWidget(buttons[i]);
     }
-    visuBox->setLayout((layout));
+    visuBox->setLayout(layout);
 }
+

@@ -6,6 +6,7 @@
 #include<sstream>
 #include<algorithm>
 #include<cmath>
+#include<iostream>
 
 #include "ms1ms2.h"
 #include "spectra.h"
@@ -254,8 +255,10 @@ ResultSap Scoring::comp2spvAngleAap (std::vector<Spectrum> sp1v,
   for (std::size_t i = 0; i < r3.size() - 1; i++) {
     std::size_t k = i + 1;
     double ms1delta = r3[k].get_m() - r3[i].get_m();
+    std::cout << "one" << std::endl;
     while( ms1delta < mdelta && k < r3.size()) {
       ms1delta = r3[k].get_m() - r3[i].get_m();
+      std::cout << "two" << std::endl;
       if (r3[k].isQuery() != r3[i].isQuery()) {
         int qindex = i;
         if (r3[k].isQuery()) {
@@ -270,6 +273,7 @@ ResultSap Scoring::comp2spvAngleAap (std::vector<Spectrum> sp1v,
         int i1 = r3[qindex].get_id();
         int i2 = r3[i + k - qindex].get_id();
         // seq
+        std::cout << "three" << std::endl;
         std::string sp2seq = sp2v.at(i2).get_seq();
         // for each delta
         for (std::size_t dli = 0; dli < inrd.size(); dli++) {

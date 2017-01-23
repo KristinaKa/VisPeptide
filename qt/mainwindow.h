@@ -12,6 +12,9 @@
 #include "../src/spc/speptide.h"
 #include "../src/spc/result.h"
 #include <iostream>
+#include <QTableWidget>
+#include <QtDebug>
+#include <QStringList>
 
 class MainWindow : public QWidget
 {
@@ -23,16 +26,20 @@ class MainWindow : public QWidget
     private:
     void createImportBox();
     void createParameterBox();
-    void createVisuBox();
+    void createVisuBox(ResultSap result);
+    void fillTableWidget(ResultSap);
 
 
     enum { NumGridRows = 3, NumButtons = 4 };
 
     QLabel *openFileNameLabel;
     std::vector<std::string> mgfFileNames;
+
+    QGridLayout *mainLayout;
     QGroupBox *importBox;
     QGroupBox *parameterBox;
     QGroupBox *visuBox;
+    QTableWidget *resultsTable;
     QPushButton *buttons[NumButtons];
 
 public slots:

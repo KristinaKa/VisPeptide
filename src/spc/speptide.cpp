@@ -40,7 +40,7 @@ ResultSap launch_speptide (string mgf1F, string mgf2F)
    const char* ini_file = "/home/kristina/Travail/projet_genie_logiciel/VisPeptide/params/default.ini";
    ini = iniparser_load(ini_file);
 
- 
+
   // annot params
   double byDelta = iniparser_getdouble(ini, "anot:da", 0.5);
 
@@ -87,7 +87,7 @@ ResultSap launch_speptide (string mgf1F, string mgf2F)
   // another (second) database with seq tab(annotation - true)
   vector<Spectrum> spv1 = msp.loadMGF(mgf1F, masses, byDelta, false, false);
   vector<Spectrum> spv2 = msp.loadMGF(mgf2F, masses, byDelta, true, addions);
-  
+
   // output double precision
   cout << setprecision(7);
   
@@ -140,7 +140,7 @@ ResultSap launch_speptide (string mgf1F, string mgf2F)
         erms1, isPpm, erDa, pdiv, ms1deltas, masses, ath,
         norm, iConst, trAlg, refdiv);
     // print final result
-    //ncfin.print();
+    ncfin.print();
     return ncfin;
   }
 

@@ -1,27 +1,19 @@
 #include "mainwindow.h"
 #include "QFileDialog"
+#include <iostream>
+
+using namespace std;
 
 MainWindow::MainWindow()
 {
         createImportBox();
         createParameterBox();
-        createVisuBox();
-        //createGridGroupBox();
-        //createFormGroupBox();
+
         //le layout principal
-        QGridLayout *mainLayout = new QGridLayout;
-        /*In general, the QBoxLayout class takes the space it gets
-         * (from its parent layout or from the parent widget),
-         * divides it up into a series of boxes, and makes each managed
-         * widget fill one box. If the QBoxLayout's orientation is Qt::Horizontal
-         * the boxes are placed in a row. If the orientation is Qt::Vertical,
-         * the boxes are placed in a column.
-         * The corresponding convenience classes are QHBoxLayout and QVBoxLayout,
-         * respectively. */
+        mainLayout = new QGridLayout;
         mainLayout->addWidget(importBox, 0, 0);
         mainLayout->addWidget(parameterBox, 1, 0);
         //addLayout(QLayout *layout, int row, int column, int rowSpan, int columnSpan, Qt::Alignment alignment = Qt::Alignment())
-        mainLayout->addWidget(visuBox,0, 1, 2, 2);
 
         setLayout(mainLayout); //we install the layout in the window
         setWindowTitle(tr("Basic Layouts"));
@@ -72,9 +64,61 @@ void MainWindow::run(){
         string mgf2F = mgfFileNames[1];
 
         ResultSap res = launch_speptide(mgf1F, mgf2F);
-        std::cout<<"fini !!!"<<endl;
+
+        createVisuBox(res);
+        mainLayout->addWidget(visuBox,0, 1, 2, 2);
      }
 }
+
+void MainWindow::createVisuBox(ResultSap result)
+{
+    visuBox = new QGroupBox(tr("Visu"));
+    QVBoxLayout *layout = new QVBoxLayout;
+
+    //Création et remplissage d'une table de résultats
+    resultsTable = new QTableWidget(this);
+    fillTableWidget(result);
+
+    layout->addWidget(resultsTable);
+
+    visuBox->setLayout(layout);
+}
+
+void MainWindow::fillTableWidget(ResultSap result)
+{
+    int row_n = result.get_nb_results();
+    int column_n = 7;
+
+    qDebug()<<"row "<<row_n;
+
+    resultsTable->setRowCount(row_n);
+    resultsTable->setColumnCount(column_n);
+
+    QStringList labels;
+    labels.append("title seq 1");
+    labels.append("title 2");
+    labels.append("position");
+    labels.append("aminoacid 1");
+    labels.append("aminoacid 2");
+    labels.append("sequence 2");
+    labels.append("angle");
+    resultsTable->setHorizontalHeaderLabels(labels);
+
+
+    for (int row=0; row<row_n; row++){
+    std::vector<std::string> resultsLine = result.get_result_with_index(row);
+        for (int column=0; column<column_n; column++){
+            std::cout<<"resultsLine "<< resultsLine[column]<<"\n";
+            QString text = QString::fromStdString(resultsLine[column]);
+            qDebug()<<"qstring text"<<text;
+            QTableWidgetItem *newItem = new QTableWidgetItem(text);
+            qDebug()<<row<<" "<<column;
+            resultsTable->setItem(row, column, newItem);
+        }
+    }
+}
+
+
 
 int MainWindow::verifyImports(){
     if (mgfFileNames.size() == 2)
@@ -95,16 +139,5 @@ void MainWindow::createParameterBox()
     }
     //On installe le layout dans la boite
     parameterBox->setLayout(layout);
-}
-
-void MainWindow::createVisuBox()
-{
-    visuBox = new QGroupBox(tr("Visu"));
-    QVBoxLayout *layout = new QVBoxLayout;
-    for (int i = 0; i < NumButtons; ++i) {
-        buttons[i] = new QPushButton(tr("Button %1").arg(i + 1));
-        layout->addWidget(buttons[i]);
-    }
-    visuBox->setLayout(layout);
 }
 

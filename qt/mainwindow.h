@@ -15,6 +15,8 @@
 #include <QTableWidget>
 #include <QtDebug>
 #include <QStringList>
+#include <QProcess>
+#include <QByteArray>
 
 class MainWindow : public QWidget
 {
@@ -26,14 +28,14 @@ class MainWindow : public QWidget
     private:
     void createImportBox();
     void createParameterBox();
-    void createVisuBox(ResultSap result);
+    //void createVisuBox(ResultSap result);
     void fillTableWidget(ResultSap);
-
+      void createVisuBox(QByteArray);
 
     enum { NumGridRows = 3, NumButtons = 4 };
 
     QLabel *openFileNameLabel;
-    std::vector<std::string> mgfFileNames;
+    QStringList mgfFileNames;
 
     QGridLayout *mainLayout;
     QGroupBox *importBox;
@@ -41,11 +43,13 @@ class MainWindow : public QWidget
     QGroupBox *visuBox;
     QTableWidget *resultsTable;
     QPushButton *buttons[NumButtons];
+    QProcess *process;
 
 public slots:
     void browse();
     void run();
     int verifyImports();
+
 };
 
 #endif // MAINWINDOW_H

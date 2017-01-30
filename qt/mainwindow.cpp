@@ -48,30 +48,53 @@ void MainWindow::createImportBox()
 
 
 void MainWindow::browse(){
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select a file to open...", QDir::homePath());
-
+    mgfFileNames = QFileDialog::getOpenFileNames(this, "Select a file to open...", QDir::homePath());
+    /*
     for (int i=0; i<fileNames.size(); i++){
-        QString fileName = fileNames[i];
-        std::string name = fileName.toUtf8().constData();
-        mgfFileNames.push_back(name);
-        openFileNameLabel->setText(openFileNameLabel->text()+"\n"+fileName);
-   }
+        //QString fileName = fileNames[i];
+        //std::string name = fileName.toUtf8().constData();
+        mgfFileNames << fileNames[i];
+        openFileNameLabel->setText(openFileNameLabel->text()+"\n"+fileNames[i]);
+   }*/
 }
 
 void MainWindow::run(){
     if (mgfFileNames.size() >= 2){
-        string mgf1F = mgfFileNames[0];
-        string mgf2F = mgfFileNames[1];
+        //string mgf1F = mgfFileNames[0];
+        //string mgf2F = mgfFileNames[1];
 
-        ResultSap res = launch_speptide(mgf1F, mgf2F);
+        //ResultSap res = launch_speptide(mgf1F, mgf2F);
 
-        createVisuBox(res);
-        mainLayout->addWidget(visuBox,0, 1, 2, 2);
+        process = new QProcess(this);
+        process->start("./speptide ../tests/h1.mgf ../tests/h2.mgf ../params/default.ini");
+
+        QByteArray results_array = process->readAllStandardOutput();
+        qDebug()<< process->error();
+        qDebug()<< process->state();
+
+        //QObject::connect(process, SIGNAL(readyRead()), this, SLOT(createVisuBox()));
+
+        //process.start("./speptide")
+
+        createVisuBox(results_array);
+        //mainLayout->addWidget(visuBox,0, 1, 2, 2);
      }
 }
 
-void MainWindow::createVisuBox(ResultSap result)
+//void MainWindow::createVisuBox(ResultSap result)
+void MainWindow::createVisuBox(QByteArray results_array)
 {
+   if (results_array.isEmpty())
+       qDebug() << "empty :(";
+    char *data = results_array.data();
+    while (*data) {
+        qDebug() << "[" << *data << "]" << endl;
+        //QString text = *data;
+        //QTableWidgetItem *newItem = new QTableWidgetItem(text);
+        ++data;
+    }
+
+    /*
     visuBox = new QGroupBox(tr("Visu"));
     QVBoxLayout *layout = new QVBoxLayout;
 
@@ -82,6 +105,7 @@ void MainWindow::createVisuBox(ResultSap result)
     layout->addWidget(resultsTable);
 
     visuBox->setLayout(layout);
+    */
 }
 
 void MainWindow::fillTableWidget(ResultSap result)

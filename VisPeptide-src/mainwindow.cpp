@@ -75,12 +75,12 @@ void MainWindow::browse(){
 void MainWindow::run(){
 
 
-  char *command = "./../src/speptide ";
+  char *command = "./../speptide-src/speptide ";
 
   char *file1 = (char*)mgfFileNames[0].c_str();
   char *file2 = (char*)mgfFileNames[1].c_str();
   char *params = (char*)mgfFileNames[2].c_str();
-  char *output = " >> ./../src/results.txt"; 
+  char *output = " >> ./../speptide-src/results.txt";
   char result[1000];   // array to hold the result.
 
   strcpy(result,command);
@@ -96,6 +96,7 @@ void MainWindow::run(){
   std::system(result); 
 
   readResults();
+  std::system("rm ../speptide-src/results.txt");
   createVisuBox();
 
   mainLayout->addWidget(visuBox,0, 1, 2, 2);
@@ -133,9 +134,9 @@ void MainWindow::checkResults(){
         }
       }
       
-     NewWindow *mMyNewWindow = new NewWindow(myButtonResults); // Be sure to destroy you window somewhere
+     ResultWindow *mMyResultWindow = new ResultWindow(myButtonResults); // Be sure to destroy you window somewhere
 
-     mMyNewWindow->show();
+     mMyResultWindow->show();
 }
 
 
@@ -148,7 +149,7 @@ int MainWindow::verifyImports(){
 
 void MainWindow::readResults(){
 
-	std::ifstream infile("../src/results.txt");
+    std::ifstream infile("../speptide-src/results.txt");
 	std::string line;
   std::vector< std::vector <char*> > results_data;
   std::vector<char*> results_line;

@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "newwindow.h"
+#include "resultwindow.h"
 #include <cstdlib>
 #include <vector>
 #include <QGroupBox>
@@ -43,7 +43,7 @@ class MainWindow : public QWidget
     QTableWidget *resultsTable;
     QPushButton *buttons[NumButtons];
 
-    std::vector<NewWindow *> ResultsWindows;   
+    std::vector<ResultWindow *> ResultsWindows;
     std::vector<QPushButton *> buttonsResults;
     QPushButton *buttonParameters;
     std::vector< std::vector <char*> > results;

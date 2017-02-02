@@ -1,11 +1,11 @@
 
-#include "newwindow.h"
+#include "mainwindow.h"
 #include "QFileDialog"
 #include <iostream>
 #include <fstream>
 
 
-NewWindow::NewWindow(std::vector<char*> &results)
+ResultWindow::ResultWindow(std::vector<char*> &results)
 {
   this->results=results;
   resultsBox = new QGroupBox(tr("Your Result"));
@@ -27,7 +27,7 @@ NewWindow::NewWindow(std::vector<char*> &results)
   data = data +  "<p><b>Reference sequence : </b><br>";
   data = data + colorSequence(0) + "</p>";
 
-  data = data + "<p><b> SAP on the sequence : </b>";
+  data = data + "<p><b> SAP on the sequence : </b></br>";
   data = data +colorSequence(1) + "</p>";
 
   data = data + "<p><b> Cos angle between spectra : </b>";
@@ -43,7 +43,6 @@ NewWindow::NewWindow(std::vector<char*> &results)
 
   layout->addWidget(sequence);
 
-
   resultsBox->setLayout(layout);
         
   mainLayout = new QGridLayout;
@@ -52,11 +51,11 @@ NewWindow::NewWindow(std::vector<char*> &results)
   setWindowTitle(tr("Results"));
 }
 
-NewWindow::~NewWindow(){
+ResultWindow::~ResultWindow(){
   
 }
 
-QString NewWindow::colorSequence(int mode){
+QString ResultWindow::colorSequence(int mode){
 
 
   int position = atoi(results[2]);

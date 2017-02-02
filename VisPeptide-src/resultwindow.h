@@ -20,13 +20,13 @@
 
 
 
-class NewWindow : public QWidget
+class ResultWindow : public QWidget
 {
     Q_OBJECT
 
     public:
-        NewWindow(std::vector<char*> &);
-        ~NewWindow();
+        ResultWindow(std::vector<char*> &);
+        ~ResultWindow();
         QString colorSequence(int);
     private:
       std::vector<char*> results;

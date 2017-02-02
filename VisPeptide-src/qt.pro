@@ -8,5 +8,5 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += mainwindow.h newwindow.h
-SOURCES += main.cpp mainwindow.cpp newwindow.cpp
+HEADERS += mainwindow.h resultwindow.h
+SOURCES += main.cpp mainwindow.cpp resultwindow.cpp

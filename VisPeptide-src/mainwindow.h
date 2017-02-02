@@ -27,33 +27,27 @@ class MainWindow : public QWidget
         MainWindow();
 
     private:
-    void createImportBox();
-    void createVisuBox();
-    void readResults();
+        QLabel *openFileNameLabel;
+        std::vector<std::string> mgfFileNames;
 
+        QGridLayout *mainLayout;
+        QGroupBox *importBox;
+        QGroupBox *visuBox;
 
-    enum { NumGridRows = 3, NumButtons = 4 };
+        std::vector<ResultWindow *> ResultsWindows;
+        std::vector<QPushButton *> resultsButtons;
+        QPushButton *parametersButton;
+        std::vector< std::vector <char*> > results;
 
-    QLabel *openFileNameLabel;
-    std::vector<std::string> mgfFileNames;
+        void createImportBox();
+        void createVisuBox();
+        void readResults();
 
-    QGridLayout *mainLayout;
-    QGroupBox *importBox;
-    QGroupBox *visuBox;
-    QTableWidget *resultsTable;
-    QPushButton *buttons[NumButtons];
-
-    std::vector<ResultWindow *> ResultsWindows;
-    std::vector<QPushButton *> buttonsResults;
-    QPushButton *buttonParameters;
-    std::vector< std::vector <char*> > results;
-
-public slots:
-    void browse();
-    void loadParameters();
-    void run();
-    int verifyImports();
-    void checkResults();
+    public slots:
+        void browse();
+        void loadParameters();
+        void run();
+        void checkResults();
 };
 
 #endif // MAINWINDOW_H

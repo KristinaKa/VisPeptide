@@ -18,8 +18,6 @@ MainWindow::MainWindow()
 }
 
 
-
-
 void MainWindow::createImportBox()
 {
     importBox = new QGroupBox(tr("Data"));
@@ -33,9 +31,9 @@ void MainWindow::createImportBox()
     QObject::connect(browseButton, SIGNAL(clicked()), this, SLOT(browse()));
 
     //Load parameters button
-    buttonParameters = new QPushButton("Load Parameters");
-    layout->addWidget(buttonParameters);
-    QObject::connect(buttonParameters, SIGNAL(clicked()), this, SLOT(loadParameters()));
+    parametersButton = new QPushButton("Load Parameters");
+    layout->addWidget(parametersButton);
+    QObject::connect(parametersButton, SIGNAL(clicked()), this, SLOT(loadParameters()));
 
     //Run button
     QPushButton* runButton = new QPushButton("Run");
@@ -91,8 +89,6 @@ void MainWindow::run(){
   strcat(result,params);
   strcat(result,output);
 
-  std::cout << result << std::endl;
-
   std::system(result); 
 
   readResults();
@@ -105,7 +101,7 @@ void MainWindow::run(){
 
 void MainWindow::createVisuBox()
 {
-    visuBox = new QGroupBox(tr("Visu"));
+    visuBox = new QGroupBox(tr("Results"));
     QVBoxLayout *layout = new QVBoxLayout;
 
     QString data;
@@ -113,9 +109,9 @@ void MainWindow::createVisuBox()
 
     for (int i = 0; i< results.size(); i++){
       
-      buttonsResults.push_back(new QPushButton("See result"));
-      layout->addWidget(buttonsResults[i]);
-      QObject::connect(buttonsResults[i], SIGNAL(clicked()), this, SLOT(checkResults()));
+      resultsButtons.push_back(new QPushButton("See result"));
+      layout->addWidget(resultsButtons[i]);
+      QObject::connect(resultsButtons[i], SIGNAL(clicked()), this, SLOT(checkResults()));
 
     }
 
@@ -128,8 +124,8 @@ void MainWindow::checkResults(){
 
       std::vector<char *> myButtonResults;
 
-      for (int i=0; i<buttonsResults.size(); i++){
-        if (inconnu==buttonsResults[i]){
+      for (int i=0; i<resultsButtons.size(); i++){
+        if (inconnu==resultsButtons[i]){
             myButtonResults = results[i];         
         }
       }
@@ -140,42 +136,31 @@ void MainWindow::checkResults(){
 }
 
 
-int MainWindow::verifyImports(){
-    if (mgfFileNames.size() == 2)
-        return 1;
-    return 0;
-}
-
-
 void MainWindow::readResults(){
 
     std::ifstream infile("../speptide-src/results.txt");
-	std::string line;
-  std::vector< std::vector <char*> > results_data;
-  std::vector<char*> results_line;
-
-  std::string s;
-  char * scopy;
+    std::string line;
+    std::vector< std::vector <char*> > results_data;
+    std::vector<char*> results_line;
+    std::string s;
+    char * scopy;
 
 	while (std::getline(infile, line))
 	{
+        istringstream ss(line);
 
-    istringstream ss(line);
-    std::cout << "c'est une ligne " << std::endl;
-    while(ss){
-
-      if (!getline( ss, s, '\t' )) break;
-      
-      scopy = new char[s.size() + 1];
-      std::copy(s.begin(), s.end(), scopy);
-      scopy[s.size()] = '\0'; 
+        while(ss){
+            if (!getline( ss, s, '\t' )) break;
+            scopy = new char[s.size() + 1];
+            std::copy(s.begin(), s.end(), scopy);
+            scopy[s.size()] = '\0';
   
-      results_line.push_back(scopy);
+            results_line.push_back(scopy);
        }
+
+        results_data.push_back(results_line);
     
-    results_data.push_back(results_line);
-    
-    results_line.clear();
+        results_line.clear();
 
 	}
 

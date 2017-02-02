@@ -9,17 +9,12 @@ using namespace std;
 MainWindow::MainWindow()
 {
         createImportBox();
-        createParameterBox();
 
-        //le layout principal
         mainLayout = new QGridLayout;
         mainLayout->addWidget(importBox, 0, 0);
-        mainLayout->addWidget(parameterBox, 1, 0);
-        //addLayout(QLayout *layout, int row, int column, int rowSpan, int columnSpan, Qt::Alignment alignment = Qt::Alignment())
 
-        setLayout(mainLayout); //we install the layout in the window
-        setWindowTitle(tr("Basic Layouts"));
-	//QPushButton run = new QPushButton("run");
+        setLayout(mainLayout);
+        setWindowTitle(tr("VisPeptide"));
 }
 
 
@@ -27,25 +22,26 @@ MainWindow::MainWindow()
 
 void MainWindow::createImportBox()
 {
-    //La boîte
     importBox = new QGroupBox(tr("Data"));
-    //Le layout qui ira dans la boîte
-    QHBoxLayout *layout = new QHBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
 
-    //Browse button
-    QPushButton* browseButton = new QPushButton("Browse");
+    //Load mgf files button
+    QPushButton* browseButton = new QPushButton("Load mgf files");
     layout->addWidget(browseButton);
     openFileNameLabel = new QLabel("");
     layout->addWidget(openFileNameLabel);
     QObject::connect(browseButton, SIGNAL(clicked()), this, SLOT(browse()));
+
+    //Load parameters button
+    buttonParameters = new QPushButton("Load Parameters");
+    layout->addWidget(buttonParameters);
+    QObject::connect(buttonParameters, SIGNAL(clicked()), this, SLOT(loadParameters()));
 
     //Run button
     QPushButton* runButton = new QPushButton("Run");
     layout->addWidget(runButton);
     QObject::connect(runButton, SIGNAL(clicked()), this, SLOT(run()));
 
-
-    //On installe le layout dans la boite
     importBox->setLayout(layout);
 }
 
@@ -76,7 +72,6 @@ void MainWindow::browse(){
 
 
 
-
 void MainWindow::run(){
 
 
@@ -86,7 +81,7 @@ void MainWindow::run(){
   char *file2 = (char*)mgfFileNames[1].c_str();
   char *params = (char*)mgfFileNames[2].c_str();
   char *output = " >> ./../src/results.txt"; 
- char result[1000];   // array to hold the result.
+  char result[1000];   // array to hold the result.
 
   strcpy(result,command);
   strcat(result,file1);
@@ -102,15 +97,9 @@ void MainWindow::run(){
 
   readResults();
   createVisuBox();
-//  if (mgfFileNames.size() >= 2){
-//        string mgf1F = mgfFileNames[0];
-//        string mgf2F = mgfFileNames[1];
 
-//        ResultSap res = launch_speptide(mgf1F, mgf2F);
-//
-//        createVisuBox(res);
   mainLayout->addWidget(visuBox,0, 1, 2, 2);
-  //   }
+
 }
 
 void MainWindow::createVisuBox()
@@ -120,46 +109,33 @@ void MainWindow::createVisuBox()
 
     QString data;
 
-    //QPushButton *buttonsResults[results.size()];
-
 
     for (int i = 0; i< results.size(); i++){
-
       
-      buttonsResults.push_back(new QPushButton("Browse"));
-      //buttonsResults[i] = new QPushButton("Browse");
+      buttonsResults.push_back(new QPushButton("See result"));
       layout->addWidget(buttonsResults[i]);
       QObject::connect(buttonsResults[i], SIGNAL(clicked()), this, SLOT(checkResults()));
 
     }
 
-    //QTextEdit *sequence = new QTextEdit();
-    //sequence->setHtml(data);
-
-
-    //layout->addWidget(sequence);
-    
     visuBox->setLayout(layout);
 }
 
 void MainWindow::checkResults(){
 
-      std::cout << "ici" << std::endl;
       QObject *inconnu = sender();
 
       std::vector<char *> myButtonResults;
 
       for (int i=0; i<buttonsResults.size(); i++){
         if (inconnu==buttonsResults[i]){
-            myButtonResults = results[i]; 
-        
+            myButtonResults = results[i];         
         }
-
       }
       
      NewWindow *mMyNewWindow = new NewWindow(myButtonResults); // Be sure to destroy you window somewhere
 
-    mMyNewWindow->show();
+     mMyNewWindow->show();
 }
 
 
@@ -167,27 +143,6 @@ int MainWindow::verifyImports(){
     if (mgfFileNames.size() == 2)
         return 1;
     return 0;
-}
-
-void MainWindow::createParameterBox()
-{
-    //La boîte
-    parameterBox = new QGroupBox(tr("Parameters"));
-    //Le layout qui ira dans la boîte
-    QHBoxLayout *layout = new QHBoxLayout;
-
-
-//
-//    for (int i = 0; i < NumButtons; ++i) {
-//        buttons[i] = new QPushButton(tr("Button %1").arg(i + 1));
-//        layout->addWidget(buttons[i]);
-//    }
-    buttonParameters = new QPushButton("Load Parameters");
-    layout->addWidget(buttonParameters);
-
-    QObject::connect(buttonParameters, SIGNAL(clicked()), this, SLOT(loadParameters()));
-    //On installe le layout dans la boite
-    parameterBox->setLayout(layout);
 }
 
 

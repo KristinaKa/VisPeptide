@@ -28,7 +28,6 @@ class MainWindow : public QWidget
 
     private:
     void createImportBox();
-    void createParameterBox();
     void createVisuBox();
     void readResults();
 
@@ -40,7 +39,6 @@ class MainWindow : public QWidget
 
     QGridLayout *mainLayout;
     QGroupBox *importBox;
-    QGroupBox *parameterBox;
     QGroupBox *visuBox;
     QTableWidget *resultsTable;
     QPushButton *buttons[NumButtons];

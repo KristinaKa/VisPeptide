@@ -6,6 +6,7 @@
 #include<sstream>
 #include<algorithm>
 #include<cmath>
+#include<iostream>
 
 #include "ms1ms2.h"
 #include "spectra.h"

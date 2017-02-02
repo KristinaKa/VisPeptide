@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <set>
+#include <sstream>
 
 // Result parent class
 // Something like data.frame representation (list of vectors)
@@ -110,4 +111,26 @@ void ResultSap::print() {
     std::cout << angle[i];
     std::cout << std::endl;
   }
+}
+
+int ResultSap::get_nb_results(){
+    return title1.size();
+}
+
+std::vector<std::string> ResultSap::get_result_with_index(int i){
+    std::vector<std::string> result;
+    result.push_back(title1[i]);
+    result.push_back(title2[i]);
+    result.push_back(pos[i]);
+    result.push_back(ami1[i]);
+    result.push_back(ami2[i]);
+    result.push_back(seq2[i]);
+    std::ostringstream strs;
+    strs << angle[i];
+    std::string angle = strs.str();
+    result.push_back(angle);
+    /*for (int i=0; i<result.size(); i++)
+        std::cout<<"colonne no"<<i<<":"<<result[i]<<"\n";
+    */
+    return result;
 }

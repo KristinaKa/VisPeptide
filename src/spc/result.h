@@ -52,6 +52,10 @@ private:
 public:
   ResultSap();
 
+  int get_nb_results();
+
+  std::vector<std::string> get_result_with_index(int i);
+
   void add_result(std::string _title1, std::string _title2,
       double _m1, double _m2,
       std::string _seq2, double _angle, std::string _ami1, std::string _ami2,

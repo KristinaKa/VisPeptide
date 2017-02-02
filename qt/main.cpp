@@ -2,9 +2,6 @@
 #include <QWidget>
 #include "mainwindow.h"
 
-#include "../src/spc/speptide.h"
-#include "../src/spc/result.h"
-
 
 int main(int argc, char *argv[])
 

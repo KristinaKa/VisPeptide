@@ -1,6 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "newwindow.h"
+#include <cstdlib>
+#include <vector>
 #include <QGroupBox>
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -9,9 +12,12 @@
 #include <QLabel>
 #include <string>
 #include <vector>
-#include "../src/spc/speptide.h"
-#include "../src/spc/result.h"
+#include <sstream>
 #include <iostream>
+#include <QTableWidget>
+#include <QtDebug>
+#include <QStringList>
+#include <QTextEdit>
 
 class MainWindow : public QWidget
 {
@@ -24,21 +30,32 @@ class MainWindow : public QWidget
     void createImportBox();
     void createParameterBox();
     void createVisuBox();
+    void readResults();
 
 
     enum { NumGridRows = 3, NumButtons = 4 };
 
     QLabel *openFileNameLabel;
     std::vector<std::string> mgfFileNames;
+
+    QGridLayout *mainLayout;
     QGroupBox *importBox;
     QGroupBox *parameterBox;
     QGroupBox *visuBox;
+    QTableWidget *resultsTable;
     QPushButton *buttons[NumButtons];
+
+    std::vector<NewWindow *> ResultsWindows;   
+    std::vector<QPushButton *> buttonsResults;
+    QPushButton *buttonParameters;
+    std::vector< std::vector <char*> > results;
 
 public slots:
     void browse();
+    void loadParameters();
     void run();
     int verifyImports();
+    void checkResults();
 };
 
 #endif // MAINWINDOW_H

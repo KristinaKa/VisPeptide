@@ -23,9 +23,7 @@ current version date: 24.03.2016
 #include <stdexcept>
 #include "time.h"
 
-extern "C" {
 #include "../ini/iniparser.h"
-}
 #include "spectra.h"
 #include "mparser.h"
 #include "result.h"
@@ -33,14 +31,39 @@ extern "C" {
 
 using namespace std;
 
-ResultSap launch_speptide (string mgf1F, string mgf2F)
+int main (int argc, char *argv[])
 {
-   dictionary* ini;
-//Path à changer!!!
-   const char* ini_file = "/home/kristina/Travail/projet_genie_logiciel/VisPeptide/params/default.ini";
-   ini = iniparser_load(ini_file);
+  try {
+  
+  // check input arguments and print help
+  if(argc != 4) {
+    cout << "  speptide version 0.92 by Dima Ischenko (ischenko.dmitry@gmail.com)" << endl;
+    cout << endl;
+    cout << "  Usage:" << endl;
+    cout << "   speptide <exp mgf> <db mgf> <config>" << endl;
+    cout << endl;
+    cout << "  Inputs:" << endl;
+    cout << "   <exp mgf>    (string)  experiment spectra mgf file." << endl;
+    cout << "   <db mgf>     (string)  database spectra mgf file (with SEQ tag)." << endl;
+    cout << "   <config>     (string)  ini file with params for search." << endl;
+    cout << endl;
+    cout << "  Output (tab separated format):" << endl;
+    cout << "   [exp spectra] [db spectra] [position] [exp ami] [db ami] [db seq] [cos(theta)]" << endl;
+    cout << endl;
+    cout << "  Read doc/speptide.pdf for detailed information.";
+    cout << endl;
+    exit(1);
+  }
 
- 
+  // set mgf filenames
+  string mgf1F = (string)argv[1];
+  string mgf2F = (string)argv[2];
+  
+  // load ini file and set params
+  dictionary* ini;
+  ini = iniparser_load(argv[3]);
+  if (ini == NULL) return -1;
+
   // annot params
   double byDelta = iniparser_getdouble(ini, "anot:da", 0.5);
 
@@ -82,7 +105,6 @@ ResultSap launch_speptide (string mgf1F, string mgf2F)
   vector<ADelta> ms1deltas = msp.defaultDeltas();
   sort(ms1deltas.begin(), ms1deltas.end());
 
-  cout<<mgf1F<<"\n";
   // load and parse mgf data. one set is query(annotation - false)
   // another (second) database with seq tab(annotation - true)
   vector<Spectrum> spv1 = msp.loadMGF(mgf1F, masses, byDelta, false, false);
@@ -140,10 +162,13 @@ ResultSap launch_speptide (string mgf1F, string mgf2F)
         erms1, isPpm, erDa, pdiv, ms1deltas, masses, ath,
         norm, iConst, trAlg, refdiv);
     // print final result
-    //ncfin.print();
-    return ncfin;
+    ncfin.print();
+  }
+  } catch(exception& e) {
+    cerr << "Error: " << e.what() << endl;
+    exit(1);
   }
 
   // ola
-  return ResultSap();
+  return 0;
 }

@@ -26,13 +26,16 @@ void MainWindow::createImportBox()
     //Load mgf files button
     QPushButton* browseButton = new QPushButton("Load mgf files");
     layout->addWidget(browseButton);
-    openFileNameLabel = new QLabel("");
-    layout->addWidget(openFileNameLabel);
-    QObject::connect(browseButton, SIGNAL(clicked()), this, SLOT(browse()));
+    mgfFilesLabel = new QLabel("");
+    layout->addWidget(mgfFilesLabel);
+    QObject::connect(browseButton, SIGNAL(clicked()), this, SLOT(loadMgf()));
 
     //Load parameters button
     parametersButton = new QPushButton("Load Parameters");
     layout->addWidget(parametersButton);
+    parametersFileLabel = new QLabel("");
+    layout->addWidget(parametersFileLabel);
+
     QObject::connect(parametersButton, SIGNAL(clicked()), this, SLOT(loadParameters()));
 
     //Run button
@@ -44,42 +47,37 @@ void MainWindow::createImportBox()
 }
 
 
-void MainWindow::loadParameters(){
-
-    QStringList fileParameter = QFileDialog::getOpenFileNames(this, "Select a file to open...", QDir::homePath());
-
-    for (int i=0; i<fileParameter.size(); i++){
-        QString fileName = fileParameter[i];
-        std::string name = fileName.toUtf8().constData();
-        mgfFileNames.push_back(name);
-        openFileNameLabel->setText(openFileNameLabel->text()+"\n"+fileName);
-   }
-
-}
-
-void MainWindow::browse(){
+void MainWindow::loadMgf(){
     QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select a file to open...", QDir::homePath());
 
     for (int i=0; i<fileNames.size(); i++){
         QString fileName = fileNames[i];
         std::string name = fileName.toUtf8().constData();
         mgfFileNames.push_back(name);
-        openFileNameLabel->setText(openFileNameLabel->text()+"\n"+fileName);
+        mgfFilesLabel->setText(mgfFilesLabel->text()+"\n"+fileName);
    }
 }
 
+
+void MainWindow::loadParameters(){
+
+    QString fileName = QFileDialog::getOpenFileName(this, "Select a file to open...", QDir::homePath());
+    iniFileName = fileName.toUtf8().constData();
+    parametersFileLabel->setText(fileName);
+
+}
 
 
 void MainWindow::run(){
 
 
-  char *command = "./../speptide-src/speptide ";
+  char *command = "./speptide-src/speptide ";
 
   char *file1 = (char*)mgfFileNames[0].c_str();
   char *file2 = (char*)mgfFileNames[1].c_str();
-  char *params = (char*)mgfFileNames[2].c_str();
-  char *output = " >> ./../speptide-src/results.txt";
-  char result[1000];   // array to hold the result.
+  char *params = (char*)iniFileName.c_str();
+  char *output = " >> ./speptide-src/results.txt";
+  char result[1000];
 
   strcpy(result,command);
   strcat(result,file1);
@@ -92,7 +90,7 @@ void MainWindow::run(){
   std::system(result); 
 
   readResults();
-  std::system("rm ../speptide-src/results.txt");
+  std::system("rm ./speptide-src/results.txt");
   createVisuBox();
 
   mainLayout->addWidget(visuBox,0, 1, 2, 2);
@@ -130,15 +128,14 @@ void MainWindow::checkResults(){
         }
       }
       
-     ResultWindow *mMyResultWindow = new ResultWindow(myButtonResults); // Be sure to destroy you window somewhere
-
+     ResultWindow *mMyResultWindow = new ResultWindow(myButtonResults);
      mMyResultWindow->show();
 }
 
 
 void MainWindow::readResults(){
 
-    std::ifstream infile("../speptide-src/results.txt");
+    std::ifstream infile("./speptide-src/results.txt");
     std::string line;
     std::vector< std::vector <char*> > results_data;
     std::vector<char*> results_line;

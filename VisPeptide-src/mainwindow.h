@@ -27,8 +27,10 @@ class MainWindow : public QWidget
         MainWindow();
 
     private:
-        QLabel *openFileNameLabel;
+        QLabel *mgfFilesLabel;
+        QLabel *parametersFileLabel;
         std::vector<std::string> mgfFileNames;
+        std::string iniFileName;
 
         QGridLayout *mainLayout;
         QGroupBox *importBox;
@@ -44,7 +46,7 @@ class MainWindow : public QWidget
         void readResults();
 
     public slots:
-        void browse();
+        void loadMgf();
         void loadParameters();
         void run();
         void checkResults();

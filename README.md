@@ -21,4 +21,4 @@ Utilisation :
 
 Fichier de configuration :
 ======
-Le fichier de configuration (**.ini**) contient tous les différents paramètres.
+Le fichier de configuration (**.ini**) contient tou les différents paramètres.
